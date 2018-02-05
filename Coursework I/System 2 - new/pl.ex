@@ -17,12 +17,6 @@ defmodule PL do
 
   defp handler_loop(sender, receiver) do
     receive do
-      {:send} ->
-        send sender, {:send}
-        handler_loop(sender, receiver)
-      {:msg, id} ->
-        send receiver, {:receive, id}
-        handler_loop(sender, receiver)
       {:stop, app} ->
         send sender, {:stop, self()}
         send receiver, {:stop, self()}
@@ -33,6 +27,12 @@ defmodule PL do
             {:receive_state, state2} -> state2
           end}
         send app, {:state, Enum.zip(send_state, receive_state)}
+      {:send} ->
+        send sender, {:send}
+        handler_loop(sender, receiver)
+      {:msg, id} ->
+        send receiver, {:receive, id}
+        handler_loop(sender, receiver)
     end
   end
 
