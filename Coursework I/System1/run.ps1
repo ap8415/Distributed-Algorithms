@@ -1,7 +1,7 @@
 elixirc client.ex
-elixirc server.ex
+elixirc system1.ex
 
-elixir -e Server.start
+elixir -e System1.start
 
 del -Force Elixir.Client.beam
 del -Force Elixir.Server.beam
