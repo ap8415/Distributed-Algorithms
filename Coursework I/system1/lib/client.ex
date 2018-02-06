@@ -9,16 +9,17 @@ defmodule Client do
   defp next(peer_id, peers) do
     receive do
       {:broadcast, timeout, max_broadcasts} ->
-        end_time = :os.system_time(:milli_seconds) + timeout
-        start_broadcast(peer_id, peers, end_time, max_broadcasts)
+        start_broadcast(peer_id, peers, timeout, max_broadcasts)
     end
   end
 
   # The broadcast strategy used is to split each client into two threads;
   # the original one for receiving, and a new one for sending messages.
-  defp start_broadcast(peer_id, neighbours, end_time, max_broadcasts) do
+  defp start_broadcast(peer_id, neighbours, timeout, max_broadcasts) do
     send_state = for _ <- 1..length(neighbours), do: 0
     receive_state = for _ <- 1..length(neighbours), do: 0
+    end_time = :os.system_time(:milli_seconds) + timeout
+    :timer.send_after(timeout, {:timeout})
     spawn(Client, :send_client,
             [peer_id, neighbours, end_time, max_broadcasts, self(), send_state])
     receive_client(peer_id, receive_state, end_time)
@@ -41,11 +42,7 @@ defmodule Client do
     receive_state = receive do
       {:msg, id} ->
         List.replace_at(receive_state, id, Enum.at(receive_state, id) + 1)
-    after
-      # If nothing arrives in 10ms, then we timeout the receive to avoid
-      # situations when system timeout is reached, but the peer is stuck
-      # in the receive, waiting for non-existent new messages.
-      10 -> receive_state
+      {:timeout} -> receive_state
     end
     if (:os.system_time(:milli_seconds) < end_time) do
       receive_client(peer_id, receive_state, end_time)

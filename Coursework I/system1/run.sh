@@ -1,2 +1,2 @@
 mix compile
-mix run -e System1.start
+mix run --no-halt -e System1.start
