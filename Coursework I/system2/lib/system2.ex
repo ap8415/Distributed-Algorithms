@@ -3,7 +3,7 @@ defmodule System2 do
   def start do
      # Later on, input these via cmdline
     number_of_peers = 5
-    timeout = 20000
+    timeout = 30
     max_broadcasts = 1000000
     peers = for i <- 0..number_of_peers - 1 do
       spawn(Peer, :start, [i, self()])

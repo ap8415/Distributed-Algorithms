@@ -1,7 +1,6 @@
 defmodule System3 do
 
   def start do
-     # Later on, input these via cmdline
     number_of_peers = 5
     timeout = 3000
     max_broadcasts = 100000

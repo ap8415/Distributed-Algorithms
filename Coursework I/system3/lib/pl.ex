@@ -11,36 +11,52 @@ defmodule PL do
       {:bind_beb, beb} ->
         empty_state = for _ <- 1..map_size(pl_map), do: 0
         end_time = :os.system_time(:milli_seconds) + timeout
-        next(id, pl_map, beb, empty_state, end_time)
+        sender = spawn(PL, :send_pl, [pl_map, id, empty_state, end_time])
+        next(beb, end_time, sender)
     end
   end
 
-  defp next(self_id, pl_map, beb, send_state, end_time) do
+  def send_pl(pl_map, id, send_state, end_time) do
     if (:os.system_time(:milli_seconds) > end_time) do
-      await_timeout(beb, send_state)
+      receive do
+        {:timeout, beb} -> send beb, {:send_state, send_state}
+      end
     else
-      send_state = receive do
-        {:pl_send, id} ->
-          send Map.get(pl_map, id), {:message, self_id}
-          List.replace_at(send_state, id, Enum.at(send_state, id) + 1)
+      receive do
+        {:pl_send, from} ->
+          send Map.get(pl_map, from), {:message, id}
+          new_state = List.replace_at(send_state, from, Enum.at(send_state, from) + 1)
+          send_pl(pl_map, id, new_state, end_time)
+        {:timeout, beb} ->
+          send beb, {:send_state, send_state}
+      end
+    end
+  end
+
+  defp next(beb, end_time, sender) do
+    if (:os.system_time(:milli_seconds) > end_time) do
+      await_timeout(beb, sender)
+    else
+      receive do
         {:message, id} ->
           send beb, {:pl_deliver, id}
-          send_state
+        {:pl_send, id} ->
+          send sender, {:pl_send, id}
         {:timeout} ->
-          timeout(beb, send_state)
+          timeout(beb, sender)
       end
-      next(self_id, pl_map, beb, send_state, end_time)
+      next(beb, end_time, sender)
     end
   end
 
-  defp await_timeout(beb, send_state) do
+  defp await_timeout(beb, sender) do
     receive do
-      {:timeout} -> timeout(beb, send_state)
+      {:timeout} -> timeout(beb, sender)
     end
   end
 
-  defp timeout(beb, send_state) do
-    send beb, {:send_state, send_state}
+  defp timeout(beb, sender) do
+    send sender, {:timeout, beb}
   end
 
 end
