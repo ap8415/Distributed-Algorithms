@@ -21,7 +21,7 @@ defmodule Client do
     receive_state = for _ <- 1..length(neighbours), do: 0
     spawn(Client, :send_client,
             [peer_id, neighbours, end_time, max_broadcasts, self(), send_state])
-    receive_client(peer_id, send_state, receive_state, false,max_broadcasts * length(neighbours), end_time)
+    receive_client(peer_id, receive_state, end_time)
   end
 
   def send_client(peer_id, neighbours, end_time, broadcasts_left, main_peer, send_state) do
@@ -37,26 +37,34 @@ defmodule Client do
     end
   end
 
-  defp receive_client(peer_id, send_state, receive_state, sends_finished, count, end_time) do
-    {send_state, receive_state, sends_finished} = receive do
-      {:sends_finished, final_send_state} ->
-        {final_send_state, receive_state, true}
-      {:msg, sender_id} ->
-        {send_state, List.replace_at(receive_state, sender_id,
-          Enum.at(receive_state, sender_id) + 1), sends_finished}
+  defp receive_client(peer_id, receive_state, end_time) do
+    receive_state = receive do
+      {:msg, id} ->
+        List.replace_at(receive_state, id, Enum.at(receive_state, id) + 1)
+    after
+      # If nothing arrives in 10ms, then we timeout the receive to avoid
+      # situations when system timeout is reached, but the peer is stuck
+      # in the receive, waiting for non-existent new messages.
+      10 -> receive_state
     end
-    if (:os.system_time(:milli_seconds) < end_time and count > 0) do
-      receive_client(peer_id, send_state, receive_state, sends_finished, count - 1, end_time)
+    if (:os.system_time(:milli_seconds) < end_time) do
+      receive_client(peer_id, receive_state, end_time)
     else
-      send_state = if sends_finished do
-        send_state
-      else
-        receive do
-          {:sends_finished, final_send_state} -> final_send_state
-        end
-      end
-      IO.puts ("#{peer_id}: #{inspect(Enum.zip(send_state, receive_state))}")
+      send_state = get_send_state()
+      output_peer(peer_id, send_state, receive_state)
     end
+  end
+
+  # Helper functions
+
+  defp get_send_state() do
+    receive do
+        {:sends_finished, final_send_state} -> final_send_state
+    end
+  end
+
+  defp output_peer(peer_id, send_state, receive_state) do
+    IO.puts ("#{peer_id}: #{inspect(Enum.zip(send_state, receive_state))}")
   end
 
 end

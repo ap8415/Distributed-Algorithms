@@ -10,7 +10,7 @@ defmodule System1 do
       send c, {:bind, peers}
       send c, {:broadcast, timeout, max_broadcasts}
     end
-    :timer.sleep(3500)
+    :timer.sleep(timeout+1000)
   end
 
 end
