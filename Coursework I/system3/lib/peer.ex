@@ -1,19 +1,20 @@
 defmodule Peer do
 
   def start id, system do
-    # Initialize App component and PL component
-    # Send PL component back to system2
-    # Await for return of all PL's
-    # Send them to its PL; bind PL and App
+    beb = spawn(BEB, :start, [])
     pl = spawn(PL, :start, [id])
+    app = spawn(App, :start, [id])
     send system, {:pl, id, pl}
+    send app, {:bind_beb, beb}
+    send pl, {:bind_beb, beb}
+    send beb, {:bind, app, pl}
     {timeout, max_broadcasts} = receive do
       {:broadcast, t_out, max_b} -> {t_out, max_b}
     end
     receive do
       {:all_pls, pl_map} ->
         send pl, {:all_pls, pl_map}
-        App.start(id, pl, map_size(pl_map), timeout, max_broadcasts)
+        send app, {:metadata, map_size(pl_map), timeout, max_broadcasts}
     end
   end
 
