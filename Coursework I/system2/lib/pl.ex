@@ -14,8 +14,10 @@ defmodule PL do
 
   defp next(self_id, pl_map, app) do
     receive do
-      {:pl_send, id} -> send Map.get(pl_map, id), {:message, self_id}
-      {:message, id} -> send app, {:pl_deliver, id}
+      {:pl_send, id} ->
+        send Map.get(pl_map, id), {:message, self_id}
+      {:message, id} ->
+        send app, {:pl_deliver, id}
     end
     next(self_id, pl_map, app)
   end

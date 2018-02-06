@@ -10,7 +10,7 @@ defmodule Peer do
     receive do
       {:all_pls, pl_map} ->
         send pl_component, {:all_pls, pl_map}
-        App.start(pl_component, timeout, max_broadcasts)
+        App.start(id, pl_component, map_size(pl_map), timeout, max_broadcasts)
     end
   end
 

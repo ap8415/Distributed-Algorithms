@@ -3,13 +3,12 @@ defmodule System2 do
   def start do
      # Later on, input these via cmdline
     number_of_peers = 5
-    timeout = 3000
-    max_broadcasts = 10000
+    timeout = 20000
+    max_broadcasts = 1000000
     peers = for i <- 0..number_of_peers - 1 do
       spawn(Peer, :start, [i, timeout, max_broadcasts, self()])
     end
     initialize_pls(number_of_peers, %{}, peers)
-    :timer.sleep(10000)
   end
 
   defp initialize_pls(ctr, pl_map, peers) do
