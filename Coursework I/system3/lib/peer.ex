@@ -13,7 +13,8 @@ defmodule Peer do
     end
     receive do
       {:all_pls, pl_map} ->
-        send pl, {:all_pls, pl_map}
+        send pl, {:metadata, pl_map, timeout}
+        send beb, {:metadata, map_size(pl_map), timeout}
         send app, {:metadata, map_size(pl_map), timeout, max_broadcasts}
     end
   end

@@ -46,7 +46,7 @@ defmodule App do
 
   defp get_send_state() do
     receive do
-        {:sends_finished, final_send_state} -> final_send_state
+      {:sends_finished, final_send_state} -> final_send_state
     end
   end
 
