@@ -18,9 +18,9 @@ defmodule Peer do
       {:broadcast, timeout, max_broadcasts} -> {timeout, max_broadcasts}
     end
 
-    send pl, {:metadata, pl_map, timeout}
-    send beb, {:metadata, map_size(pl_map), timeout}
-    send app, {:metadata, map_size(pl_map), timeout, max_broadcasts}
+    send pl, {:broadcast_data, pl_map, timeout}
+    send beb, {:broadcast_data, map_size(pl_map), timeout}
+    send app, {:broadcast_data, map_size(pl_map), timeout, max_broadcasts}
 
   end
 

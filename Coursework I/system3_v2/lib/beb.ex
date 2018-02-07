@@ -2,7 +2,7 @@ defmodule BEB do
 
   def receive_fn receive_app do
     timeout = receive do
-      {:metadata, timeout} -> timeout
+      {:broadcast_data, timeout} -> timeout
     end
 
     end_time = timeout + :os.system_time(:milli_seconds)
@@ -16,6 +16,10 @@ defmodule BEB do
       receive do
         {:pl_deliver, from} -> send app, {:beb_deliver, from}
         {:timeout, send_state} -> send app, {:timeout, send_state}
+      after
+        1 ->
+          :timer.sleep(1)
+          receive_next(app, end_time)
       end
       receive_next(app, end_time)
     end
@@ -29,7 +33,7 @@ defmodule BEB do
 
   def send_fn id, send_pl do
     no_of_peers = receive do
-      {:metadata, no_of_peers} -> no_of_peers
+      {:broadcast_data, no_of_peers} -> no_of_peers
     end
     next_send(id, send_pl, no_of_peers)
   end
@@ -40,6 +44,9 @@ defmodule BEB do
         for i <- 1..no_of_peers do
           send pl, {:pl_send, i-1, id}
         end
+      after
+        1 ->
+          :timer.sleep(1)
     end
     next_send(id, pl, no_of_peers)
   end

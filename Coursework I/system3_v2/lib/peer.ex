@@ -19,14 +19,12 @@ defmodule Peer do
       {:broadcast, timeout, max_broadcasts} -> {timeout, max_broadcasts}
     end
 
-    IO.puts timeout
-
-    send send_app, {:metadata, max_broadcasts}
-    send send_pl, {:metadata, pl_map, timeout}
-    send send_beb, {:metadata, map_size(pl_map)}
-    send receive_app, {:metadata, map_size(pl_map), timeout}
-    send receive_beb, {:metadata, timeout}
-    send receive_pl, {:metadata, timeout}
+    send send_app, {:broadcast_data, max_broadcasts}
+    send send_pl, {:broadcast_data, pl_map, timeout}
+    send send_beb, {:broadcast_data, map_size(pl_map)}
+    send receive_app, {:broadcast_data, map_size(pl_map), timeout}
+    send receive_beb, {:broadcast_data, timeout}
+    send receive_pl, {:broadcast_data, timeout}
   end
 
 end

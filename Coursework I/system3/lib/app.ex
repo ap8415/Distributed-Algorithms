@@ -8,7 +8,7 @@ defmodule App do
 
   defp await_system_request(id, beb) do
     receive do
-      {:metadata, no_of_peers, timeout, max_broadcasts} ->
+      {:broadcast_data, no_of_peers, timeout, max_broadcasts} ->
         end_time = :os.system_time(:milli_seconds) + timeout
         :timer.send_after(timeout, {:timeout})
         # Create process to initiate max_broadcasts broadcasts.

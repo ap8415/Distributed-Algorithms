@@ -4,7 +4,7 @@ defmodule BEB do
     receive do
       {:bind, app, pl} ->
         receive do
-          {:metadata, processes, timeout} ->
+          {:broadcast_data, processes, timeout} ->
             end_time = :os.system_time(:milli_seconds) + timeout
             next(processes, app, pl, end_time)
         end

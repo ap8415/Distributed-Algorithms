@@ -2,7 +2,7 @@ defmodule PL do
 
   def start id do
     receive do
-      {:metadata, pl_map, timeout} -> bind_beb(id, pl_map, timeout)
+      {:broadcast_data, pl_map, timeout} -> bind_beb(id, pl_map, timeout)
     end
   end
 
