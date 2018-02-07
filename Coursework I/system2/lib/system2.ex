@@ -8,9 +8,9 @@ defmodule System2 do
 
     peers = for i <- 1..number_of_peers do
       if local == 0 do
-        spawn(Client, :start, [i-1, self()])
+        spawn(Peer, :start, [i-1, self()])
       else
-        Node.spawn(:'node#{i}@container#{i}.localdomain', Client, :start, [i-1, self()])
+        Node.spawn(:'node#{i}@container#{i}.localdomain', Peer, :start, [i-1, self()])
       end
     end
 
