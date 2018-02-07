@@ -1,3 +1,7 @@
+
+# distributed algorithms, n.dulay, 8 jan 18
+# docker-compose.yml, v1
+
 x-common:
   &defaults
     image: elixir:alpine
