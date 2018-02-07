@@ -14,9 +14,9 @@ defmodule System1 do
       end
     end
 
-    for c <- peers do
-      send c, {:bind, peers}
-      send c, {:broadcast, timeout, max_broadcasts}
+    for peer <- peers do
+      send peer, {:bind, peers}
+      send peer, {:broadcast, timeout, max_broadcasts}
     end
   end
 
