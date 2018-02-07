@@ -26,10 +26,6 @@ defmodule App do
           id)
       {:timeout, send_state} ->
         output_peer(id, send_state, receive_state)
-      after
-        1 ->
-          :timer.sleep(1)
-          receive_next(receive_state, end_time, id)
       end
     end
   end

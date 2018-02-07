@@ -16,10 +16,6 @@ defmodule BEB do
       receive do
         {:pl_deliver, from} -> send app, {:beb_deliver, from}
         {:timeout, send_state} -> send app, {:timeout, send_state}
-      after
-        1 ->
-          :timer.sleep(1)
-          receive_next(app, end_time)
       end
       receive_next(app, end_time)
     end
@@ -44,9 +40,6 @@ defmodule BEB do
         for i <- 1..no_of_peers do
           send pl, {:pl_send, i-1, id}
         end
-      after
-        1 ->
-          :timer.sleep(1)
     end
     next_send(id, pl, no_of_peers)
   end

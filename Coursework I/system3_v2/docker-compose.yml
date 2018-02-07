@@ -25,6 +25,11 @@ services:
       - container3.localdomain
       - container4.localdomain
       - container5.localdomain
+      - container6.localdomain
+      - container7.localdomain
+      - container8.localdomain
+      - container9.localdomain
+      - container10.localdomain
 
     <<: *defaults
 
@@ -60,5 +65,40 @@ services:
     container_name: container5
     command: >
       elixir --name node5@container5.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container6.localdomain:
+    container_name: container6
+    command: >
+      elixir --name node6@container6.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container2.localdomain:
+    container_name: container7
+    command: >
+      elixir --name node7@container7.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container3.localdomain:
+    container_name: container8
+    command: >
+      elixir --name node8@container8.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container4.localdomain:
+    container_name: container9
+    command: >
+      elixir --name node9@container9.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container5.localdomain:
+    container_name: container10
+    command: >
+      elixir --name node10@container10.localdomain --cookie pass
              -S mix run --no-halt
     <<: *defaults

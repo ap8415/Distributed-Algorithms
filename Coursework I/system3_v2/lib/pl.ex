@@ -20,10 +20,6 @@ defmodule PL do
           send beb, {:pl_deliver, id}
           receive_next(beb, end_time)
         {:timeout, send_state} -> send beb, {:timeout, send_state}
-      after
-        1 ->
-          :timer.sleep(1)
-          receive_next(beb, end_time)
       end
     end
   end
@@ -49,10 +45,6 @@ defmodule PL do
           new_state = List.replace_at(send_state, to, Enum.at(send_state, to) + 1)
           send_next(new_state, pl_map, end_time, receive_pl)
         {:timeout} -> send receive_pl, {:timeout, send_state}
-      after
-        1 ->
-          :timer.sleep(1)
-          send_next(send_state, pl_map, end_time, receive_pl)
       end
     end
   end
