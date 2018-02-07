@@ -1,0 +1,104 @@
+version: "3.4"
+
+x-common:
+  &defaults
+    image: elixir:alpine
+    volumes:
+      - .:/project
+    working_dir: /project
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge
+
+services:
+  container0.localdomain:
+    container_name: container0
+    command: >
+      elixir --name node0@container0.localdomain --cookie pass
+             -S mix run --no-halt -e ${START} ${PEERS} ${MAX} ${TIMEOUT} ${RELIABILITY} 1
+    depends_on:
+      - container1.localdomain
+      - container2.localdomain
+      - container3.localdomain
+      - container4.localdomain
+      - container5.localdomain
+      - container6.localdomain
+      - container7.localdomain
+      - container8.localdomain
+      - container9.localdomain
+      - container10.localdomain
+
+    <<: *defaults
+
+  container1.localdomain:
+    container_name: container1
+    command: >
+      elixir --name node1@container1.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container2.localdomain:
+    container_name: container2
+    command: >
+      elixir --name node2@container2.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container3.localdomain:
+    container_name: container3
+    command: >
+      elixir --name node3@container3.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container4.localdomain:
+    container_name: container4
+    command: >
+      elixir --name node4@container4.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container5.localdomain:
+    container_name: container5
+    command: >
+      elixir --name node5@container5.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container6.localdomain:
+    container_name: container6
+    command: >
+      elixir --name node6@container6.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container7.localdomain:
+    container_name: container7
+    command: >
+      elixir --name node7@container7.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container8.localdomain:
+    container_name: container8
+    command: >
+      elixir --name node8@container8.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container9.localdomain:
+    container_name: container9
+    command: >
+      elixir --name node9@container9.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
+
+  container10.localdomain:
+    container_name: container10
+    command: >
+      elixir --name node10@container10.localdomain --cookie pass
+             -S mix run --no-halt
+    <<: *defaults
