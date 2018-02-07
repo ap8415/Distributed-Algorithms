@@ -1,3 +1,4 @@
+# Andrei-Bogdan Puiu (ap8415)
 defmodule App do
 
   def start(id, pl, no_of_peers, timeout, max_broadcasts) do

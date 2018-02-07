@@ -1,3 +1,4 @@
+# Andrei-Bogdan Puiu (ap8415)
 defmodule LPL do
 
   def start id, reliability do
