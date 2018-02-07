@@ -1,9 +1,8 @@
 defmodule LPL do
 
-  def start id do
-    reliability = 20
+  def start id, reliability do
     receive do
-      {:metadata, lpl_map, timeout} -> bind_beb(id, lpl_map, timeout, reliability)
+      {:broadcast_data, lpl_map, timeout} -> bind_beb(id, lpl_map, timeout, reliability)
     end
   end
 
@@ -43,7 +42,7 @@ defmodule LPL do
   end
 
   defp goes_through(reliability) do
-    reliability <= :rand.uniform(100)
+    reliability >= :rand.uniform(100)
   end
 
   defp timeout(beb, send_state) do

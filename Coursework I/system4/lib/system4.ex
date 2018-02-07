@@ -1,15 +1,22 @@
 defmodule System4 do
 
   def start do
-     # Later on, input these via cmdline
-    number_of_peers = 5
-    timeout = 3000
-    max_broadcasts = 1000000
-    peers = for i <- 0..number_of_peers - 1 do
-      spawn(Peer, :start, [i, self()])
+    {number_of_peers, _ } = Integer.parse(Enum.at(System.argv() , 0));
+    {max_broadcasts, _ } = Integer.parse(Enum.at(System.argv() , 1));
+    {timeout, _ } = Integer.parse(Enum.at(System.argv() , 2));
+    {reliability, _ } =  Integer.parse(Enum.at(System.argv() , 3));
+    {local, _} = Integer.parse(Enum.at(System.argv() , 4)); # 0 for local, 1 for Docker network
+
+    peers = for i <- 1..number_of_peers do
+      if local == 0 do
+        spawn(Peer, :start, [i-1, self(), reliability])
+      else
+        Node.spawn(:'node#{i}@container#{i}.localdomain', Peer, :start, [i-1, self(), reliability])
+      end
     end
-    for peer <- peers, do: send peer, {:broadcast, timeout, max_broadcasts}
+
     initialize_lpls(number_of_peers, %{}, peers)
+    for peer <- peers, do: send peer, {:broadcast, timeout, max_broadcasts}
   end
 
   defp initialize_lpls(ctr, lpl_map, peers) do
