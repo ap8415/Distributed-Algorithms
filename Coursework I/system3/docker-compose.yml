@@ -75,28 +75,28 @@ services:
              -S mix run --no-halt
     <<: *defaults
 
-  container2.localdomain:
+  container7.localdomain:
     container_name: container7
     command: >
       elixir --name node7@container7.localdomain --cookie pass
              -S mix run --no-halt
     <<: *defaults
 
-  container3.localdomain:
+  container8.localdomain:
     container_name: container8
     command: >
       elixir --name node8@container8.localdomain --cookie pass
              -S mix run --no-halt
     <<: *defaults
 
-  container4.localdomain:
+  container9.localdomain:
     container_name: container9
     command: >
       elixir --name node9@container9.localdomain --cookie pass
              -S mix run --no-halt
     <<: *defaults
 
-  container5.localdomain:
+  container10.localdomain:
     container_name: container10
     command: >
       elixir --name node10@container10.localdomain --cookie pass
