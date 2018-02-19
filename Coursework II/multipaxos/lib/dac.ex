@@ -74,9 +74,9 @@ def compare_ballots(b1, b2) do
           {n1, l1} = b1
           {n2, l2} = b2
           if (n1 == n2) do
-            l1 > l2 ? 1 : -1
+            if l1 > l2, do: 1, else: -1
           else
-            n1 > n2 ? 1 : -1
+            if n1 > n2, do: 1, else: -1
           end
         end
       end

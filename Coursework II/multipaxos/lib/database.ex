@@ -10,20 +10,21 @@ end # start
 
 defp next config, monitor, db_seqnum, balances do
   receive do
-  { :execute, transaction } ->
+  { :execute, transaction, replica} ->
     { :move, amount, account1, account2 } = transaction
-    
+
     balance1 = Map.get balances, account1, 0
     balances = Map.put balances, account1, balance1 + amount
     balance2 = Map.get balances, account2, 0
     balances = Map.put balances, account2, balance2 - amount
 
     send monitor, { :db_update, config.server_num, db_seqnum+1, transaction }
-    next config, monitor, db_seqnum+1, balances 
+    send replica, {:db_result, :ignore}
+    next config, monitor, db_seqnum+1, balances
 
-  _ -> 
+  _ ->
     IO.puts "Database: unexpected message"
-    System.halt 
+    System.halt
   end # receive
 end # next
 
