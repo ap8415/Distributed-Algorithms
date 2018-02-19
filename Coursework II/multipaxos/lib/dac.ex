@@ -34,12 +34,12 @@ def node_spawn node, module, function, args do
 end
 
 # ---------------------
-def random(n),            do: Enum.random 1..n
-def random_seed(n),       do: :rand.seed(:exsplus, {n, n, n})
-def random_seed(a, b, c), do: :rand.seed(:exsplus, {a, b, c})
-def adler32(x),           do: :erlang.adler32(x)
-def unzip3(triples),	    do: :lists.unzip3 triples
-def window,               do: 10    # Window of slots for replica.
+def random(n),             do: Enum.random 1..n
+def random_seed(n),        do: :rand.seed(:exsplus, {n, n, n})
+def random_seed(a, b, c),  do: :rand.seed(:exsplus, {a, b, c})
+def adler32(x),            do: :erlang.adler32(x)
+def unzip3(triples),	     do: :lists.unzip3 triples
+def window,                do: 10    # Window of slots for replica.
 
 # ---------------------
 
@@ -55,6 +55,33 @@ def get_config do
   config = Map.put config, :n_clients, String.to_integer(Enum.at System.argv, 3)
 
   config
+end
+
+# ---------------------
+
+# Returns 1 if b1 > b2, -1 if b2 > b1, 0 if b1 = b2.
+def compare_ballots(b1, b2) do
+  ret =
+    if (b1 == b2) do
+      0
+    else
+      if (b1 == -1) do
+        -1
+      else
+        if (b2 == -1) do
+          1
+        else
+          {n1, l1} = b1
+          {n2, l2} = b2
+          if (n1 == n2) do
+            l1 > l2 ? 1 : -1
+          else
+            n1 > n2 ? 1 : -1
+          end
+        end
+      end
+    end
+  ret
 end
 
 end # module -----------------------
