@@ -1,0 +1,128 @@
+make[1]: Entering directory '/root/distributed/Distributed-Algorithms/Coursework II/multipaxos'
+./gen_yml.sh Paxos.main 1 docker 1 2 
+make[1]: Leaving directory '/root/distributed/Distributed-Algorithms/Coursework II/multipaxos'
+docker-compose -p da347 up 
+Attaching to client1, client2, server1, paxos
+[36mclient1                |[0m Compiling 12 files (.ex)
+[36mclient1                |[0m warning: redefining module Scout (current version loaded from _build/dev/lib/paxos/ebin/Elixir.Scout.beam)
+[36mclient1                |[0m   lib/scout.ex:2
+[36mclient1                |[0m 
+[36mclient1                |[0m warning: redefining module Server (current version loaded from _build/dev/lib/paxos/ebin/Elixir.Server.beam)
+[36mclient1                |[0m   lib/server.ex:5
+[36mclient1                |[0m 
+[33mclient2                |[0m Compiling 12 files (.ex)
+[33mclient2                |[0m warning: redefining module Server (current version loaded from _build/dev/lib/paxos/ebin/Elixir.Server.beam)
+[33mclient2                |[0m   lib/server.ex:5
+[33mclient2                |[0m 
+[33mclient2                |[0m warning: redefining module Scout (current version loaded from _build/dev/lib/paxos/ebin/Elixir.Scout.beam)
+[33mclient2                |[0m   lib/scout.ex:2
+[33mclient2                |[0m 
+[33mclient2                |[0m Generated paxos app
+[32mserver1                |[0m Compiling 12 files (.ex)
+[32mserver1                |[0m Generated paxos app
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m 18:25:39.040 [error] ERROR: Could not find 'wxe_driver.so' in: /usr/local/lib/erlang/lib/wx-1.8.3/priv
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m           Starting server 172.18.0.5
+[35mpaxos                  |[0m 0
+[35mpaxos                  |[0m           Starting client 172.18.0.3
+[35mpaxos                  |[0m           Starting client 172.18.0.2
+[35mpaxos                  |[0m time = 1000  updates done = [{1, 309}]
+[35mpaxos                  |[0m time = 1000 requests seen = [{1, 309}]
+[35mpaxos                  |[0m time = 1000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 1000 commanders = [{1, 309}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 2000  updates done = [{1, 647}]
+[35mpaxos                  |[0m time = 2000 requests seen = [{1, 647}]
+[35mpaxos                  |[0m time = 2000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 2000 commanders = [{1, 647}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 3000  updates done = [{1, 976}]
+[35mpaxos                  |[0m time = 3000 requests seen = [{1, 976}]
+[35mpaxos                  |[0m time = 3000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 3000 commanders = [{1, 976}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 4000  updates done = [{1, 1309}]
+[35mpaxos                  |[0m time = 4000 requests seen = [{1, 1310}]
+[35mpaxos                  |[0m time = 4000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 4000 commanders = [{1, 1310}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 5000  updates done = [{1, 1642}]
+[35mpaxos                  |[0m time = 5000 requests seen = [{1, 1643}]
+[35mpaxos                  |[0m time = 5000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 5000 commanders = [{1, 1643}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 6000  updates done = [{1, 1976}]
+[35mpaxos                  |[0m time = 6000 requests seen = [{1, 1976}]
+[35mpaxos                  |[0m time = 6000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 6000 commanders = [{1, 1976}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 7000  updates done = [{1, 2310}]
+[35mpaxos                  |[0m time = 7000 requests seen = [{1, 2310}]
+[35mpaxos                  |[0m time = 7000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 7000 commanders = [{1, 2310}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 8000  updates done = [{1, 2636}]
+[35mpaxos                  |[0m time = 8000 requests seen = [{1, 2636}]
+[35mpaxos                  |[0m time = 8000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 8000 commanders = [{1, 2636}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 9000  updates done = [{1, 2968}]
+[35mpaxos                  |[0m time = 9000 requests seen = [{1, 2969}]
+[35mpaxos                  |[0m time = 9000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 9000 commanders = [{1, 2969}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 10000  updates done = [{1, 3302}]
+[35mpaxos                  |[0m time = 10000 requests seen = [{1, 3302}]
+[35mpaxos                  |[0m time = 10000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 10000 commanders = [{1, 3302}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m Client 1 going to sleep, sent = 1660
+[35mpaxos                  |[0m Client 2 going to sleep, sent = 1655
+[35mpaxos                  |[0m time = 11000  updates done = [{1, 3315}]
+[35mpaxos                  |[0m time = 11000 requests seen = [{1, 3315}]
+[35mpaxos                  |[0m time = 11000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 11000 commanders = [{1, 3315}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 12000  updates done = [{1, 3315}]
+[35mpaxos                  |[0m time = 12000 requests seen = [{1, 3315}]
+[35mpaxos                  |[0m time = 12000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 12000 commanders = [{1, 3315}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 13000  updates done = [{1, 3315}]
+[35mpaxos                  |[0m time = 13000 requests seen = [{1, 3315}]
+[35mpaxos                  |[0m time = 13000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 13000 commanders = [{1, 3315}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 14000  updates done = [{1, 3315}]
+[35mpaxos                  |[0m time = 14000 requests seen = [{1, 3315}]
+[35mpaxos                  |[0m time = 14000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 14000 commanders = [{1, 3315}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 15000  updates done = [{1, 3315}]
+[35mpaxos                  |[0m time = 15000 requests seen = [{1, 3315}]
+[35mpaxos                  |[0m time = 15000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 15000 commanders = [{1, 3315}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 16000  updates done = [{1, 3315}]
+[35mpaxos                  |[0m time = 16000 requests seen = [{1, 3315}]
+[35mpaxos                  |[0m time = 16000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 16000 commanders = [{1, 3315}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 17000  updates done = [{1, 3315}]
+[35mpaxos                  |[0m time = 17000 requests seen = [{1, 3315}]
+[35mpaxos                  |[0m time = 17000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 17000 commanders = [{1, 3315}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 18000  updates done = [{1, 3315}]
+[35mpaxos                  |[0m time = 18000 requests seen = [{1, 3315}]
+[35mpaxos                  |[0m time = 18000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 18000 commanders = [{1, 3315}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 19000  updates done = [{1, 3315}]
+[35mpaxos                  |[0m time = 19000 requests seen = [{1, 3315}]
+[35mpaxos                  |[0m time = 19000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 19000 commanders = [{1, 3315}]
+[35mpaxos                  |[0m 
+Gracefully stopping... (press Ctrl+C again to force)
+Makefile:45: recipe for target 'up' failed

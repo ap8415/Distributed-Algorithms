@@ -1,0 +1,116 @@
+make[1]: Entering directory '/root/distributed/Distributed-Algorithms/Coursework II/multipaxos'
+./gen_yml.sh Paxos.main 1 docker 1 2 
+make[1]: Leaving directory '/root/distributed/Distributed-Algorithms/Coursework II/multipaxos'
+docker-compose -p da347 up 
+Attaching to client2, client1, server1, paxos
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m 18:30:23.677 [error] ERROR: Could not find 'wxe_driver.so' in: /usr/local/lib/erlang/lib/wx-1.8.3/priv
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m           Starting server 172.18.0.5
+[35mpaxos                  |[0m 0
+[35mpaxos                  |[0m           Starting client 172.18.0.2
+[35mpaxos                  |[0m           Starting client 172.18.0.4
+[35mpaxos                  |[0m time = 1000  updates done = [{1, 222}]
+[35mpaxos                  |[0m time = 1000 requests seen = [{1, 222}]
+[35mpaxos                  |[0m time = 1000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 1000 commanders = [{1, 222}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 2000  updates done = [{1, 498}]
+[35mpaxos                  |[0m time = 2000 requests seen = [{1, 498}]
+[35mpaxos                  |[0m time = 2000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 2000 commanders = [{1, 498}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 3000  updates done = [{1, 801}]
+[35mpaxos                  |[0m time = 3000 requests seen = [{1, 801}]
+[35mpaxos                  |[0m time = 3000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 3000 commanders = [{1, 801}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 4000  updates done = [{1, 1097}]
+[35mpaxos                  |[0m time = 4000 requests seen = [{1, 1097}]
+[35mpaxos                  |[0m time = 4000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 4000 commanders = [{1, 1097}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 5000  updates done = [{1, 1378}]
+[35mpaxos                  |[0m time = 5000 requests seen = [{1, 1378}]
+[35mpaxos                  |[0m time = 5000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 5000 commanders = [{1, 1378}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 6000  updates done = [{1, 1693}]
+[35mpaxos                  |[0m time = 6000 requests seen = [{1, 1693}]
+[35mpaxos                  |[0m time = 6000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 6000 commanders = [{1, 1693}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 7000  updates done = [{1, 1964}]
+[35mpaxos                  |[0m time = 7000 requests seen = [{1, 1964}]
+[35mpaxos                  |[0m time = 7000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 7000 commanders = [{1, 1964}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 8000  updates done = [{1, 2216}]
+[35mpaxos                  |[0m time = 8000 requests seen = [{1, 2217}]
+[35mpaxos                  |[0m time = 8000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 8000 commanders = [{1, 2217}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 9000  updates done = [{1, 2494}]
+[35mpaxos                  |[0m time = 9000 requests seen = [{1, 2494}]
+[35mpaxos                  |[0m time = 9000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 9000 commanders = [{1, 2494}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 10000  updates done = [{1, 2759}]
+[35mpaxos                  |[0m time = 10000 requests seen = [{1, 2760}]
+[35mpaxos                  |[0m time = 10000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 10000 commanders = [{1, 2760}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m Client 1 going to sleep, sent = 1385
+[35mpaxos                  |[0m Client 2 going to sleep, sent = 1389
+[35mpaxos                  |[0m time = 11000  updates done = [{1, 2774}]
+[35mpaxos                  |[0m time = 11000 requests seen = [{1, 2774}]
+[35mpaxos                  |[0m time = 11000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 11000 commanders = [{1, 2774}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 12000  updates done = [{1, 2774}]
+[35mpaxos                  |[0m time = 12000 requests seen = [{1, 2774}]
+[35mpaxos                  |[0m time = 12000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 12000 commanders = [{1, 2774}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 13000  updates done = [{1, 2774}]
+[35mpaxos                  |[0m time = 13000 requests seen = [{1, 2774}]
+[35mpaxos                  |[0m time = 13000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 13000 commanders = [{1, 2774}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 14000  updates done = [{1, 2774}]
+[35mpaxos                  |[0m time = 14000 requests seen = [{1, 2774}]
+[35mpaxos                  |[0m time = 14000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 14000 commanders = [{1, 2774}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 15000  updates done = [{1, 2774}]
+[35mpaxos                  |[0m time = 15000 requests seen = [{1, 2774}]
+[35mpaxos                  |[0m time = 15000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 15000 commanders = [{1, 2774}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 16000  updates done = [{1, 2774}]
+[35mpaxos                  |[0m time = 16000 requests seen = [{1, 2774}]
+[35mpaxos                  |[0m time = 16000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 16000 commanders = [{1, 2774}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 17000  updates done = [{1, 2774}]
+[35mpaxos                  |[0m time = 17000 requests seen = [{1, 2774}]
+[35mpaxos                  |[0m time = 17000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 17000 commanders = [{1, 2774}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 18000  updates done = [{1, 2774}]
+[35mpaxos                  |[0m time = 18000 requests seen = [{1, 2774}]
+[35mpaxos                  |[0m time = 18000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 18000 commanders = [{1, 2774}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 19000  updates done = [{1, 2774}]
+[35mpaxos                  |[0m time = 19000 requests seen = [{1, 2774}]
+[35mpaxos                  |[0m time = 19000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 19000 commanders = [{1, 2774}]
+[35mpaxos                  |[0m 
+[35mpaxos                  |[0m time = 20000  updates done = [{1, 2774}]
+[35mpaxos                  |[0m time = 20000 requests seen = [{1, 2774}]
+[35mpaxos                  |[0m time = 20000 scouts = [{1, 1}]
+[35mpaxos                  |[0m time = 20000 commanders = [{1, 2774}]
+[35mpaxos                  |[0m 
+Gracefully stopping... (press Ctrl+C again to force)
+Makefile:45: recipe for target 'up' failed
