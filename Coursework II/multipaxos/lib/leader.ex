@@ -2,7 +2,7 @@
 
 defmodule Leader do
 
-  def start _ do
+  def start config, monitor do
     active = false
     ballot_num = {0, self()}
     proposals = []
@@ -11,33 +11,33 @@ defmodule Leader do
       {:bind, acceptors, replicas} -> {acceptors, replicas}
     end
 
+    send monitor, {:new_scout, config.server_num}
     spawn(Scout, :start, [self(), acceptors, ballot_num])
-    next proposals, active, ballot_num, acceptors, replicas, 0
+    next config, proposals, active, ballot_num, acceptors, replicas, monitor
   end
 
-  defp next proposals, active, ballot_num, acceptors, replicas, spawned do
+  defp next config, proposals, active, ballot_num, acceptors, replicas, monitor do
     receive do
       {:ping, other} -> send other, {:pong, self()}
       {:propose, s, c} ->
-        {spawned, proposals} = if length(Enum.filter(proposals, fn({s1, _}) -> s1 == s end)) == 0 do
-          spawned = if active do
+        proposals = if length(Enum.filter(proposals, fn({s1, _}) -> s1 == s end)) == 0 do
+          if active do
+            send monitor, {:new_commander, config.server_num}
             spawn(Commander, :start, [self(), acceptors, replicas, {ballot_num, s, c}])
-            spawned + 1
-          else
-            spawned
           end
-          {spawned, [{s, c} | proposals]}
+          [{s, c} | proposals]
         else
-          {spawned, proposals}
+          proposals
         end
-        next proposals, active, ballot_num, acceptors, replicas, spawned
+        next config, proposals, active, ballot_num, acceptors, replicas, monitor
       {:adopted, ballot_num, pvals} ->
         proposals = update(proposals, pvals)
         for {s, c} <- proposals do
+          send monitor, {:new_commander, config.server_num}
           spawn(Commander, :start, [self(), acceptors, replicas, {ballot_num, s, c}])
         end
         active = true
-        next proposals, active, ballot_num, acceptors, replicas, spawned + 1
+        next config, proposals, active, ballot_num, acceptors, replicas, monitor
       {:preempted, b} ->
         # If preempted by another ballot, the leader sleeps for a random
         # amount of time to let a consensus happen.
@@ -45,10 +45,11 @@ defmodule Leader do
         if (DAC.compare_ballots(b, ballot_num) > 0) do
           {r, _} = b
           ballot_num = {r + 1, self()}
+          send monitor, {:new_scout, config.server_num}
           spawn(Scout, :start, [self(), acceptors, ballot_num])
-          next proposals, false, ballot_num, acceptors, replicas, spawned
+          next config, proposals, false, ballot_num, acceptors, replicas, monitor
         else
-          next proposals, active, ballot_num, acceptors, replicas, spawned
+          next config, proposals, active, ballot_num, acceptors, replicas, monitor
         end
     end
   end
