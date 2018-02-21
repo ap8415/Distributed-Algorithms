@@ -1,7 +1,8 @@
 defmodule Acceptor do
 
   def start _ do
-    # Initial ballot num is placeholder
+    # -1 is used instead of the symbol in the paper
+    # for the initial value of a ballot
     next -1, []
   end
 

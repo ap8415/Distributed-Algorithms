@@ -36,7 +36,6 @@ defmodule Leader do
         if (DAC.compare_ballots(b, ballot_num) > 0) do
           {r, _} = b
           ballot_num = {r + 1, self()}
-          :timer.sleep(5000) 
           spawn(Scout, :start, [self(), acceptors, ballot_num])
           next proposals, false, ballot_num, acceptors, replicas
         else

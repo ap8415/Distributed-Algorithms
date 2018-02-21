@@ -59,29 +59,20 @@ end
 
 # ---------------------
 
-# Returns 1 if b1 > b2, -1 if b2 > b1, 0 if b1 = b2.
 def compare_ballots(b1, b2) do
-  ret =
-    if (b1 == b2) do
-      0
-    else
-      if (b1 == -1) do
-        -1
+  cond do
+    b1 == b2 -> 0
+    b1 == -1 -> -1
+    b2 == -1 -> 1
+    true ->
+      {n1, l1} = b1
+      {n2, l2} = b2
+      if (n1 == n2) do
+        if l1 > l2, do: 1, else: -1
       else
-        if (b2 == -1) do
-          1
-        else
-          {n1, l1} = b1
-          {n2, l2} = b2
-          if (n1 == n2) do
-            if l1 > l2, do: 1, else: -1
-          else
-            if n1 > n2, do: 1, else: -1
-          end
-        end
+        if n1 > n2, do: 1, else: -1
       end
-    end
-  ret
+  end
 end
 
 end # module -----------------------

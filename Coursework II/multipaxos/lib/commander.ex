@@ -1,9 +1,7 @@
 defmodule Commander do
 
   def start leader, acceptors, replicas, command do
-    for a <- acceptors do
-      send a, {:phase_2a, self(), command}
-    end
+    for a <- acceptors, do: send a, {:phase_2a, self(), command}
     next(leader, MapSet.new(acceptors), length(acceptors), replicas, command)
   end
 
