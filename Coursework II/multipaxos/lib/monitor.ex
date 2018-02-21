@@ -50,8 +50,8 @@ defp next config, clock, requests, updates, transactions, scouts, commanders do
     next config, clock, requests, updates, transactions, scouts, commanders
 
   { :new_scout, server_num } ->   # commanders
-    seen = Map.get commanders, server_num, 0
-    scouts = Map.put commanders, server_num, seen + 1
+    seen = Map.get scouts, server_num, 0
+    scouts = Map.put scouts, server_num, seen + 1
     next config, clock, requests, updates, transactions, scouts, commanders
 
   :print ->

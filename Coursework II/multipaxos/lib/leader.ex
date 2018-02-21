@@ -5,7 +5,7 @@ defmodule Leader do
   def start config, monitor do
     active = false
     ballot_num = {0, self()}
-    proposals = []
+    proposals = %{}
 
     {acceptors, replicas} = receive do
       {:bind, acceptors, replicas} -> {acceptors, replicas}
@@ -18,14 +18,13 @@ defmodule Leader do
 
   defp next config, proposals, active, ballot_num, acceptors, replicas, monitor do
     receive do
-      {:ping, other} -> send other, {:pong, self()}
       {:propose, s, c} ->
-        proposals = if length(Enum.filter(proposals, fn({s1, _}) -> s1 == s end)) == 0 do
+        proposals = if proposals[s] == nil do
           if active do
             send monitor, {:new_commander, config.server_num}
             spawn(Commander, :start, [self(), acceptors, replicas, {ballot_num, s, c}])
           end
-          [{s, c} | proposals]
+          Map.put(proposals, s, c)
         else
           proposals
         end
@@ -56,13 +55,20 @@ defmodule Leader do
 
   defp update proposals, pvals do
     pvals = pmax(pvals)
-    Enum.filter(
-      proposals,
-      fn({s, _}) -> (length(Enum.filter(pvals, fn({s1, _}) -> s == s1 end)) == 0) end
-    )
+
+    Enum.reduce(proposals, pvals,
+      fn({slot, command}, pvalues) ->
+        pvalues = if pvalues[slot] == nil do
+          Map.put(pvalues, slot, command)
+        else
+          pvalues
+        end
+        pvalues
+      end)
   end
 
   defp pmax pvals do
+    IO.puts MapSet.size pvals
     pvals = Enum.filter(
       pvals,
       fn({b, s, _}) ->
@@ -73,7 +79,7 @@ defmodule Leader do
           fn(x, acc) -> x and acc end
         ) end
       )
-    Enum.map(pvals, fn({_, s, c}) -> {s, c} end)
+    Map.new(Enum.map(pvals, fn({_, s, c}) -> {s, c} end))
   end
 
 end

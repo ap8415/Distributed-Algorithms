@@ -5,7 +5,7 @@ defmodule Acceptor do
   def start _ do
     # -1 is used instead of the symbol in the paper
     # for the initial value of a ballot
-    next -1, []
+    next -1, MapSet.new()
   end
 
   defp next ballot_num, accepted do
@@ -16,7 +16,7 @@ defmodule Acceptor do
         next ballot_num, accepted
       {:phase_2a, leader, {b, slot, command}} ->
         accepted = if DAC.compare_ballots(b, ballot_num) > 0 do
-          [{b, slot, command} | accepted]
+          MapSet.put accepted, {b, slot, command}
         else
           accepted
         end
