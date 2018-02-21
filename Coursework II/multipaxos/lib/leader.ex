@@ -16,7 +16,7 @@ defmodule Leader do
   defp next proposals, active, ballot_num, acceptors, replicas do
     receive do
       {:propose, s, c} ->
-        proposals = if length(Enum.filter(proposals, fn({s1, c1}) -> s1 == s end)) == 0 do
+        proposals = if length(Enum.filter(proposals, fn({s1, _}) -> s1 == s end)) == 0 do
           if active do
             spawn(Commander, :start, [self(), acceptors, replicas, {ballot_num, s, c}])
           end
@@ -33,8 +33,8 @@ defmodule Leader do
         active = true
         next proposals, active, ballot_num, acceptors, replicas
       {:preempted, b} ->
-        if (DAC.compare_ballots(b, ballot_num) >= 0) do
-          {r, l} = b
+        if (DAC.compare_ballots(b, ballot_num) > 0) do
+          {r, _} = b
           ballot_num = {r + 1, self()}
           spawn(Scout, :start, [self(), acceptors, ballot_num])
           next proposals, false, ballot_num, acceptors, replicas
@@ -46,27 +46,24 @@ defmodule Leader do
 
   defp update proposals, pvals do
     pvals = pmax(pvals)
-    proposals = Enum.filter(
+    Enum.filter(
       proposals,
-      fn({s, c}) -> (length(Enum.filter(pvals, fn({s1, c1}) -> s == s1 end)) == 0) end
+      fn({s, _}) -> (length(Enum.filter(pvals, fn({s1, _}) -> s == s1 end)) == 0) end
     )
   end
 
   defp pmax pvals do
     pvals = Enum.filter(
       pvals,
-      fn({b, s, c}) ->
+      fn({b, s, _}) ->
         List.foldl(
-          Enum.map(pvals, fn({b1, s1, c1}) ->
+          Enum.map(pvals, fn({b1, s1, _}) ->
             (if (s1 == s), do: b1 <= b, else: true) end),
           true,
           fn(x, acc) -> x and acc end
         ) end
       )
-    pvals = Enum.map(pvals, fn({b, s, c}) -> {s, c} end)
-
+    Enum.map(pvals, fn({_, s, c}) -> {s, c} end)
   end
-
-
 
 end

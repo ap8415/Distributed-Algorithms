@@ -1,6 +1,7 @@
 defmodule Replica do
 
   def start _, database, _ do
+    :observer.start
     receive do {:bind, leaders} -> next database, leaders, 1, 1, [], %{}, [] end
   end
 
@@ -35,6 +36,7 @@ defmodule Replica do
         else
           decision_loop(remaining, slot_out, proposals, requests, db)
         end
+      {s_out, prop, req}
     end
   end
 
@@ -62,15 +64,15 @@ defmodule Replica do
       if is_reconfig(op) do
         update_leaders()
       end
-      proposals = if Enum.find(decisions, fn({s, _}) -> s == slot_in end) == nil do
-        [command | requests] = requests
+      {requests, proposals} = if Enum.find(decisions, fn({s, _}) -> s == slot_in end) == nil do
+        [command | requests] = requests # TODO: may not be working
         proposals = Map.put(proposals, slot_in, command)
         for leader <- leaders do
           send leader, {:propose, slot_in, command}
         end
-        proposals
+        {requests, proposals}
       else
-        proposals
+        {requests, proposals}
       end
       propose(database, leaders, slot_in + 1, slot_out, requests, proposals, decisions)
     else
