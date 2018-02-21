@@ -1,7 +1,6 @@
 defmodule Replica do
 
   def start config, database, monitor do
-    :observer.start
     receive do {:bind, leaders} -> next config, database, leaders, 1, 1, [], %{}, [], monitor end
   end
 
@@ -66,7 +65,7 @@ defmodule Replica do
         update_leaders()
       end
       {requests, proposals} = if Enum.find(decisions, fn({s, _}) -> s == slot_in end) == nil do
-        [command | requests] = requests 
+        [command | requests] = requests
         proposals = Map.put(proposals, slot_in, command)
         for leader <- leaders do
           send leader, {:propose, slot_in, command}
