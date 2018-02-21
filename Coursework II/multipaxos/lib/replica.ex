@@ -32,9 +32,9 @@ defmodule Replica do
   end
 
   def propose config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor do
-    if (slot_in < slot_out + DAC.window and length(requests) > 0) do
+    if (slot_in < slot_out + config.window and length(requests) > 0) do
       {_, {_, _, op}} = Enum.find(decisions, {nil, {nil, nil, nil}},
-          fn({s, _}) -> s == slot_in - DAC.window end)
+          fn({s, _}) -> s == slot_in - config.window end)
 
       if is_reconfig(op) do
         update_leaders()

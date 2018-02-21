@@ -39,9 +39,11 @@ defmodule Leader do
         active = true
         next proposals, active, ballot_num, acceptors, replicas, spawned + 1
       {:preempted, b} ->
+        # If preempted by another ballot, the leader sleeps for a random
+        # amount of time to let a consensus happen.
+        Process.sleep(:rand.uniform(100))
         if (DAC.compare_ballots(b, ballot_num) > 0) do
-          {r, l} = b
-          ping(l)
+          {r, _} = b
           ballot_num = {r + 1, self()}
           spawn(Scout, :start, [self(), acceptors, ballot_num])
           next proposals, false, ballot_num, acceptors, replicas, spawned
@@ -71,15 +73,6 @@ defmodule Leader do
         ) end
       )
     Enum.map(pvals, fn({_, s, c}) -> {s, c} end)
-  end
-
-  defp ping other_leader do
-    send other_leader, {:ping, self()}
-    :timer.sleep(5)
-    receive do
-      {:pong, other_leader} -> ping other_leader
-    after 5 -> "The leader goes on"
-    end
   end
 
 end

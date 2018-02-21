@@ -39,7 +39,6 @@ def random_seed(n),        do: :rand.seed(:exsplus, {n, n, n})
 def random_seed(a, b, c),  do: :rand.seed(:exsplus, {a, b, c})
 def adler32(x),            do: :erlang.adler32(x)
 def unzip3(triples),	     do: :lists.unzip3 triples
-def window,                do: 10    # Window of slots for replica.
 
 # ---------------------
 
