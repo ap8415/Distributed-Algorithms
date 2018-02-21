@@ -1,0 +1,5 @@
+make[1]: Entering directory '/root/distributed/Distributed-Algorithms/Coursework II/multipaxos'
+./gen_yml.sh Paxos.main 1 docker 5 2 
+make[1]: Leaving directory '/root/distributed/Distributed-Algorithms/Coursework II/multipaxos'
+docker-compose -p da347 up 
+Makefile:45: recipe for target 'up' failed

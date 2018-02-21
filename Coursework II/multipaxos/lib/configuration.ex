@@ -14,7 +14,7 @@ def version 1 do	# configuration 1
   client_stop:  10_000,	# time (ms) to stop sending further requests
   n_accounts:   100,	# number of active bank accounts
   max_amount:   1000,	# max amount moved between accounts
-  window:       10,    # slots window for replica
+  window:       100,    # slots window for replica
 
   print_after:  1_000	# print transaction log summary every print_after msecs
 
