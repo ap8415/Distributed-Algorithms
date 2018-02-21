@@ -1,4 +1,4 @@
-
+# Andrei-Bogdan Puiu (ap8415) and Maurizio Zen (mz4715)
 # distributed algorithms, n.dulay, 25 jan 18
 # helper functions v2
 

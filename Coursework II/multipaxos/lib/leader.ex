@@ -1,3 +1,5 @@
+# Andrei-Bogdan Puiu (ap8415) and Maurizio Zen (mz4715)
+
 defmodule Leader do
 
   def start _ do

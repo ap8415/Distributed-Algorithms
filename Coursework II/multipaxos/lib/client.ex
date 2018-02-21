@@ -1,4 +1,4 @@
-
+# Andrei-Bogdan Puiu (ap8415) and Maurizio Zen (mz4715)
 # distributed algorithms, n.dulay 2 feb 18
 # coursework 2, paxos made moderately complex
 
@@ -42,7 +42,7 @@ end # next
 
 defp handle_reply do  # this discards all replies received
   receive do
-  { :reply, cid, result } ->
+  { :reply, _, _} ->
     #IO.puts "Client #{cid} received result!"
     handle_reply()
   after 0 -> true

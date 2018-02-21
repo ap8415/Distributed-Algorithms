@@ -1,4 +1,4 @@
-
+# Andrei-Bogdan Puiu (ap8415) and Maurizio Zen (mz4715)
 # distributed algorithms, n.dulay 2 feb 18
 # coursework 2, paxos made moderately complex
 

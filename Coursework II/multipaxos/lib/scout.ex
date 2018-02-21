@@ -1,3 +1,4 @@
+# Andrei-Bogdan Puiu (ap8415) and Maurizio Zen (mz4715)
 defmodule Scout do
 
   def start leader, acceptors, ballot_num do

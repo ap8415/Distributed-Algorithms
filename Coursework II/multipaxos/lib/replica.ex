@@ -1,3 +1,4 @@
+# Andrei-Bogdan Puiu (ap8415) and Maurizio Zen (mz4715)
 defmodule Replica do
 
   def start config, database, monitor do
@@ -80,7 +81,7 @@ defmodule Replica do
     end
   end
 
-  def is_reconfig(operation) do
+  def is_reconfig(_) do
     false
   end
 
