@@ -12,36 +12,41 @@ defmodule Leader do
     end
 
     spawn(Scout, :start, [self(), acceptors, ballot_num])
-    next proposals, active, ballot_num, acceptors, replicas
+    next proposals, active, ballot_num, acceptors, replicas, 0
   end
 
-  defp next proposals, active, ballot_num, acceptors, replicas do
+  defp next proposals, active, ballot_num, acceptors, replicas, spawned do
     receive do
+      {:ping, other} -> send other, {:pong, self()}
       {:propose, s, c} ->
-        proposals = if length(Enum.filter(proposals, fn({s1, _}) -> s1 == s end)) == 0 do
-          if active do
+        {spawned, proposals} = if length(Enum.filter(proposals, fn({s1, _}) -> s1 == s end)) == 0 do
+          spawned = if active do
             spawn(Commander, :start, [self(), acceptors, replicas, {ballot_num, s, c}])
+            spawned + 1
+          else
+            spawned
           end
-          [{s, c} | proposals]
+          {spawned, [{s, c} | proposals]}
         else
-          proposals
+          {spawned, proposals}
         end
-        next proposals, active, ballot_num, acceptors, replicas
+        next proposals, active, ballot_num, acceptors, replicas, spawned
       {:adopted, ballot_num, pvals} ->
         proposals = update(proposals, pvals)
         for {s, c} <- proposals do
           spawn(Commander, :start, [self(), acceptors, replicas, {ballot_num, s, c}])
         end
         active = true
-        next proposals, active, ballot_num, acceptors, replicas
+        next proposals, active, ballot_num, acceptors, replicas, spawned + 1
       {:preempted, b} ->
         if (DAC.compare_ballots(b, ballot_num) > 0) do
-          {r, _} = b
+          {r, l} = b
+          ping(l)
           ballot_num = {r + 1, self()}
           spawn(Scout, :start, [self(), acceptors, ballot_num])
-          next proposals, false, ballot_num, acceptors, replicas
+          next proposals, false, ballot_num, acceptors, replicas, spawned
         else
-          next proposals, active, ballot_num, acceptors, replicas
+          next proposals, active, ballot_num, acceptors, replicas, spawned
         end
     end
   end
@@ -66,6 +71,15 @@ defmodule Leader do
         ) end
       )
     Enum.map(pvals, fn({_, s, c}) -> {s, c} end)
+  end
+
+  defp ping other_leader do
+    send other_leader, {:ping, self()}
+    :timer.sleep(5)
+    receive do
+      {:pong, other_leader} -> ping other_leader
+    after 5 -> "The leader goes on"
+    end
   end
 
 end

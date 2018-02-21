@@ -5,6 +5,7 @@
 defmodule Paxos do
 
 def main do
+  :observer.start
   config = DAC.get_config
   if config.debug_level >= 2, do: IO.inspect config
   if config.setup == :docker, do: Process.sleep config.docker_delay

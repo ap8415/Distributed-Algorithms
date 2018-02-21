@@ -10,6 +10,7 @@ defmodule Commander do
   defp next leader, waitfor, acceptors_no, replicas, command do
     receive do
       {:phase_2b, acceptor, ballot_num} ->
+        #IO.puts "Was not preempted"
         {b, s, c} = command
         if (DAC.compare_ballots(ballot_num, b) == 0) do
           waitfor = MapSet.delete(waitfor, acceptor)

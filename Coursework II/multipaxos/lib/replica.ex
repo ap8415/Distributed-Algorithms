@@ -8,13 +8,51 @@ defmodule Replica do
   def next config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor do
     receive do
       {:request, command} ->
+        # We log when requests arrive to the replica.
+        # It takes time for them to be sent to the leader.
         send monitor, {:client_request, config.server_num}
+
         propose(config, database, leaders, slot_in, slot_out, [command | requests], proposals, decisions, monitor)
       {:decision, slot, c} ->
         decisions = [{slot, c} | decisions]
+
         {slot_out, proposals, requests}
           = decision_loop(decisions, slot_out, proposals, requests, database)
+
         next(config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor)
+      after 10 ->
+        # When the slot window (defined at DAC.window) is small (which should
+        # usually be the case), all {:request, cmd} messages are received by
+        # the replica, but the replica hasn't yet proposed them all to leader.
+        #
+        # If that happens, this after clause makes sure that the replica can
+        # keep calling 'propose' until the request list is empty.
+        propose(config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor)
+    end
+  end
+
+  def propose config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor do
+    if (slot_in < slot_out + DAC.window and length(requests) > 0) do
+      {_, {_, _, op}} = Enum.find(decisions, {nil, {nil, nil, nil}},
+          fn({s, _}) -> s == slot_in - DAC.window end)
+
+      if is_reconfig(op) do
+        update_leaders()
+      end
+
+      {requests, proposals} = if Enum.find(decisions, fn({s, _}) -> s == slot_in end) == nil do
+        [command | requests] = requests
+        proposals = Map.put(proposals, slot_in, command)
+        for leader <- leaders do
+          send leader, {:propose, slot_in, command}
+        end
+        {requests, proposals}
+      else
+        {requests, proposals}
+      end
+      propose(config, database, leaders, slot_in + 1, slot_out, requests, proposals, decisions, monitor)
+    else
+      next(config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor)
     end
   end
 
@@ -55,29 +93,6 @@ defmodule Replica do
     send db, {:execute, op, self()}
     receive do
       {:db_result, result} -> result
-    end
-  end
-
-  def propose config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor do
-    if (slot_in < slot_out + DAC.window and length(requests) > 0) do
-      {_, {_, _, op}} = Enum.find(decisions, {nil, {nil, nil, nil}},
-          fn({s, _}) -> s == slot_in - DAC.window end)
-      if is_reconfig(op) do
-        update_leaders()
-      end
-      {requests, proposals} = if Enum.find(decisions, fn({s, _}) -> s == slot_in end) == nil do
-        [command | requests] = requests
-        proposals = Map.put(proposals, slot_in, command)
-        for leader <- leaders do
-          send leader, {:propose, slot_in, command}
-        end
-        {requests, proposals}
-      else
-        {requests, proposals}
-      end
-      propose(config, database, leaders, slot_in + 1, slot_out, requests, proposals, decisions, monitor)
-    else
-      next(config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor)
     end
   end
 
