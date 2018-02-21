@@ -1,19 +1,20 @@
 defmodule Replica do
 
-  def start _, database, _ do
+  def start config, database, monitor do
     :observer.start
-    receive do {:bind, leaders} -> next database, leaders, 1, 1, [], %{}, [] end
+    receive do {:bind, leaders} -> next config, database, leaders, 1, 1, [], %{}, [], monitor end
   end
 
-  def next database, leaders, slot_in, slot_out, requests, proposals, decisions do
+  def next config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor do
     receive do
       {:request, command} ->
-        propose(database, leaders, slot_in, slot_out, [command | requests], proposals, decisions)
+        send monitor, {:client_request, config.server_num}
+        propose(config, database, leaders, slot_in, slot_out, [command | requests], proposals, decisions, monitor)
       {:decision, slot, c} ->
         decisions = [{slot, c} | decisions]
         {slot_out, proposals, requests}
           = decision_loop(decisions, slot_out, proposals, requests, database)
-        next(database, leaders, slot_in, slot_out, requests, proposals, decisions)
+        next(config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor)
     end
   end
 
@@ -57,7 +58,7 @@ defmodule Replica do
     end
   end
 
-  def propose database, leaders, slot_in, slot_out, requests, proposals, decisions do
+  def propose config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor do
     if (slot_in < slot_out + DAC.window and length(requests) > 0) do
       {_, {_, _, op}} = Enum.find(decisions, {nil, {nil, nil, nil}},
           fn({s, _}) -> s == slot_in - DAC.window end)
@@ -65,7 +66,7 @@ defmodule Replica do
         update_leaders()
       end
       {requests, proposals} = if Enum.find(decisions, fn({s, _}) -> s == slot_in end) == nil do
-        [command | requests] = requests # TODO: may not be working
+        [command | requests] = requests 
         proposals = Map.put(proposals, slot_in, command)
         for leader <- leaders do
           send leader, {:propose, slot_in, command}
@@ -74,9 +75,9 @@ defmodule Replica do
       else
         {requests, proposals}
       end
-      propose(database, leaders, slot_in + 1, slot_out, requests, proposals, decisions)
+      propose(config, database, leaders, slot_in + 1, slot_out, requests, proposals, decisions, monitor)
     else
-      next(database, leaders, slot_in, slot_out, requests, proposals, decisions)
+      next(config, database, leaders, slot_in, slot_out, requests, proposals, decisions, monitor)
     end
   end
 

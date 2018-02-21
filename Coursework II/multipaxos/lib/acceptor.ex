@@ -1,6 +1,6 @@
 defmodule Acceptor do
 
-  def start config do
+  def start _ do
     # Initial ballot num is placeholder
     next -1, []
   end
